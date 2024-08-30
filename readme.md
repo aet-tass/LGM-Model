@@ -1,16 +1,13 @@
-# Large Multi-View Gaussian Model (LGM)
+
+## Large Multi-View Gaussian Model
 
 This is the official implementation of *LGM: Large Multi-View Gaussian Model for High-Resolution 3D Content Creation*.
 
 ### [Project Page](https://me.kiui.moe/lgm/) | [Arxiv](https://arxiv.org/abs/2402.05054) | [Weights](https://huggingface.co/ashawkey/LGM) | <a href="https://huggingface.co/spaces/ashawkey/LGM"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Gradio%20Demo-Huggingface-orange"></a>
 
-### Overview
 
-The Large Multi-View Gaussian Model (LGM) is designed for high-resolution 3D content creation by leveraging multi-view Gaussian representations. The model generates detailed 3D content from multiple views by using a deep neural network architecture that integrates Gaussian splatting techniques with novel rendering methods. This implementation allows for efficient training and inference, providing tools for generating, visualizing, and converting 3D content.
 
-### Installation
-
-To set up the environment for LGM, follow these steps:
+### Install
 
 ```bash
 # xformers is required! please refer to https://github.com/facebookresearch/xformers for details.
@@ -27,55 +24,56 @@ pip install git+https://github.com/NVlabs/nvdiffrast
 
 # other dependencies
 pip install -r requirements.txt
+```
 
+### Pretrained Weights
 
-Pretrained Weights
-Pretrained weights are available for download on Hugging Face.
+Our pretrained weight can be downloaded from [huggingface](https://huggingface.co/ashawkey/LGM).
 
-To download the fp16 model for inference:
-
+For example, to download the fp16 model for inference:
+```bash
 mkdir pretrained && cd pretrained
 wget https://huggingface.co/ashawkey/LGM/resolve/main/model_fp16_fixrot.safetensors
 cd ..
+```
 
+For [MVDream](https://github.com/bytedance/MVDream) and [ImageDream](https://github.com/bytedance/ImageDream), we use a [diffusers implementation](https://github.com/ashawkey/mvdream_diffusers).
+Their weights will be downloaded automatically.
 
-For MVDream and ImageDream, weights are automatically downloaded through a diffusers implementation.
+### Inference
 
-Inference
-Inference requires approximately 10GB of GPU memory to load all required models.
+Inference takes about 10GB GPU memory (loading all imagedream, mvdream, and our LGM).
 
-### Gradio app for text/image to 3D
+```bash
+### gradio app for both text/image to 3D
 python app.py big --resume pretrained/model_fp16.safetensors
 
-### Test
+### test
 # --workspace: folder to save output (*.ply and *.mp4)
-# --test_path: path to a folder containing images or a single image
+# --test_path: path to a folder containing images, or a single image
 python infer.py big --resume pretrained/model_fp16.safetensors --workspace workspace_test --test_path data_test 
 
-### Local GUI to visualize saved PLY files
+### local gui to visualize saved ply
 python gui.py big --output_size 800 --test_path workspace_test/saved.ply
 
-### Mesh conversion
+### mesh conversion
 python convert.py big --test_path workspace_test/saved.ply
+```
 
+For more options, please check [options](./core/options.py).
 
-For more options, please check options.
+### Training
 
-Training
-NOTE: Since the dataset used in our training is based on AWS, it cannot be directly used for training in a new environment. We provide the necessary training code framework, please check and modify the dataset implementation!
+**NOTE**: 
+Since the dataset used in our training is based on AWS, it cannot be directly used for training in a new environment.
+We provide the necessary training code framework, please check and modify the [dataset](./core/provider_objaverse.py) implementation!
 
-We also provide the ~80K subset of Objaverse used to train LGM in objaverse_filter.
+We also provide the **~80K subset of [Objaverse](https://objaverse.allenai.org/objaverse-1.0)** used to train LGM in [objaverse_filter](https://github.com/ashawkey/objaverse_filter).
 
-# Debug training
+```bash
+# debug training
 accelerate launch --config_file acc_configs/gpu1.yaml main.py big --workspace workspace_debug
 
-# Training (use slurm for multi-nodes training)
+# training (use slurm for multi-nodes training)
 accelerate launch --config_file acc_configs/gpu8.yaml main.py big --workspace workspace
-
-Team
-This project is an internship at 3D Smart Factory. The team members are:
-
-AYOUB ET-TASS GitHub
-Elhaimer Salma GitHub
-Choukhantri Ikram GitHub
-
+```
