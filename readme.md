@@ -77,3 +77,11 @@ accelerate launch --config_file acc_configs/gpu1.yaml main.py big --workspace wo
 # training (use slurm for multi-nodes training)
 accelerate launch --config_file acc_configs/gpu8.yaml main.py big --workspace workspace
 ```
+
+## Team
+
+This project is an internship at **3D Smart Factory**. The team members are:
+
+- **AYOUB ET-TASS** [GitHub](https://github.com/aet-tass)
+- **Elhaimer Salma** [GitHub](https://github.com/elhaimersalma)
+- **Choukhantri Ikram** [GitHub](https://github.com/ikramchoukhantri)
