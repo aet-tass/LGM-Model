@@ -57,3 +57,25 @@ python gui.py big --output_size 800 --test_path workspace_test/saved.ply
 
 ### Mesh conversion
 python convert.py big --test_path workspace_test/saved.ply
+
+
+For more options, please check options.
+
+Training
+NOTE: Since the dataset used in our training is based on AWS, it cannot be directly used for training in a new environment. We provide the necessary training code framework, please check and modify the dataset implementation!
+
+We also provide the ~80K subset of Objaverse used to train LGM in objaverse_filter.
+
+# Debug training
+accelerate launch --config_file acc_configs/gpu1.yaml main.py big --workspace workspace_debug
+
+# Training (use slurm for multi-nodes training)
+accelerate launch --config_file acc_configs/gpu8.yaml main.py big --workspace workspace
+
+Team
+This project is an internship at 3D Smart Factory. The team members are:
+
+AYOUB ET-TASS GitHub
+Elhaimer Salma GitHub
+Choukhantri Ikram GitHub
+
